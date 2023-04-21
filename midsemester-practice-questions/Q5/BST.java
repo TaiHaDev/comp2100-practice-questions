@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Fill in the items below with your UID and name:
  * @author:
@@ -16,9 +19,22 @@ public class BST {
 	 */
 	public String DNAGenerator(Integer key) {
 		// START YOUR CODE
-		
-		return null;// You are allowed to remove or change this default return value
+		Node foundNode = find(root, key);
+		if (foundNode == null) return "CGTA";
+		StringBuilder resultString = new StringBuilder();
+		Queue<Node> queue = new LinkedList<>();
+		queue.add(foundNode);
+		while(!queue.isEmpty()) {
+			Node current = queue.poll();
+			if (isOddChildren(current)) resultString.append(current.value);
+			if (current.right != null) queue.add(current.right);
+			if (current.left != null) queue.add(current.left);
+		}
+		return resultString.isEmpty() ? null : resultString.toString();
 		// END YOUR CODE
+	}
+	public boolean isOddChildren(Node node) {
+		return !((node.left == null && node.right == null) || (node.left != null && node.right != null));
 	}
 
 	/**

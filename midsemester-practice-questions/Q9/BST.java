@@ -1,3 +1,5 @@
+import java.awt.image.AreaAveragingScaleFilter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BST {
@@ -37,7 +39,15 @@ public class BST {
 		// TODO
 		// HINT: Use recursion
 		// START YOUR CODE
-
+		List<Key> result = new ArrayList<>();
+		invertedPreOrder(root, result);
 		// END YOUR CODE
+		return result;
+	}
+	public void invertedPreOrder(Node node, List<Key> result) {
+		if (node == null) return;
+		result.add(node.key);
+		invertedPreOrder(node.right, result);
+		invertedPreOrder(node.left, result);
 	}
 }

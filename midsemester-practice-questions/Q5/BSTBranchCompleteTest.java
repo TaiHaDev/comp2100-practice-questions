@@ -12,10 +12,8 @@ public class BSTBranchCompleteTest {
 	public void test() {
 		
 		BranchComplete bc = new BranchComplete();
+		assertEquals(417, bc.DNATreeCalc(209,207, 1));
+		assertEquals(209, bc.DNATreeCalc(209, 211, 1));
 
-		// START YOUR CODE
-		//HINT: assertEquals(xx, bc.DNATreeCalc(xx, xx, xx));
-		
-		// END YOUR CODE
 	}
 }

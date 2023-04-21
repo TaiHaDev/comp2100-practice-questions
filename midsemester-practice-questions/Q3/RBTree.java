@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 /*
  * Implement a checking function in Red-Black Tree to check if the following properties hold:
 The root and leaf (NIL) nodes are black
@@ -16,8 +19,16 @@ public class RBTree<T extends Comparable<T>> {
 	 */
 	public boolean testProp1() {
 		// START YOUR CODE
-		
-		return false; //you are allowed to change this return statement
+		Queue<Node> queue = new LinkedList<>();
+		queue.add(root);
+		boolean isAllLeafBlack = true;
+		while(!queue.isEmpty()) {
+			Node current = queue.poll();
+			if (current.value == null && current.colour == Colour.RED) isAllLeafBlack = false;
+			if (current.left != null) queue.add(current.left);
+			if (current.right != null) queue.add(current.right);
+		}
+		return root.colour == Colour.BLACK && isAllLeafBlack; //you are allowed to change this return statement
 		// END YOUR CODE
 	}
 
@@ -27,8 +38,17 @@ public class RBTree<T extends Comparable<T>> {
 	 */
 	public boolean testProp2() {
 		// START YOUR CODE
-		
-		return false; //you are allowed to change this return statement
+		Queue<Node> queue = new LinkedList<>();
+		if (root.left != null) queue.add(root.left);
+		if (root.right != null) queue.add(root.right);
+		boolean isValidTree = true;
+		while(!queue.isEmpty()) {
+			Node current = queue.poll();
+			if (current.colour == Colour.RED && current.parent.colour == Colour.RED) isValidTree = false;
+			if (current.left != null) queue.add(current.left);
+			if (current.right != null) queue.add(current.right);
+		}
+		return isValidTree; //you are allowed to change this return statement
 		// END YOUR CODE
 	}
 

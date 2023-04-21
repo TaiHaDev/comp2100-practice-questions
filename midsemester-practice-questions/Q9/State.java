@@ -1,3 +1,6 @@
+import exceptions.NullCharacterException;
+import exceptions.NullKeyEventException;
+
 public interface State {
 
 	default void handle(Character character, Key event) {
@@ -13,7 +16,8 @@ public interface State {
 
 		// TODO
 		// START YOUR CODE
-
+		if (character == null) throw new NullCharacterException();
+		if (event == null) throw new NullKeyEventException();
 		// END YOUR CODE
 	}
 }

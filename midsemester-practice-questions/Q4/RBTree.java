@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /*
  * Implement a function in Red-Black Tree to check if the following property hold:
@@ -11,15 +13,24 @@ public class RBTree<T extends Comparable<T>> {
 
 	public Node<T> root; // The root node of the tree
 
+
+
 	/**
 	 * Please implement this method and feel free to add additional helper methods
 	 * @return
 	 */
 	public boolean testProp3() {
-		// START YOUR CODE
-		
-		return false; //you are allowed to change this return statement
-		// END YOUR CODE
+		if (root == null) {
+			return true; // empty tree satisfies the property
+		}
+		int count = -1;
+		List<Node<T>> leaves = root.childrenLeaves();
+		for (Node<T> leaf : leaves) {
+			int currentCount = leaf.blackParentCount();
+			if (count == -1) count = currentCount;
+			if (count != currentCount) return false;
+		}
+		return true;
 	}
 
 	/**
