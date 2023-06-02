@@ -1,4 +1,5 @@
 public class StringUtil {
+
 	
 	/*
 	 * This method collapses multiple consecutive newline characters 

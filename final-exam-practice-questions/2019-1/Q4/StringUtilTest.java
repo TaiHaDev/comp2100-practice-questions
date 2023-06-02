@@ -11,7 +11,9 @@ class StringUtilTest {
 		// 
 		// All test cases should be included in this method. Do not create another method. 
 		// Auto grader will not check the other methods created individually
-		
+		assertEquals(StringUtil.collapseNewlines("a"), "a");
+		assertEquals(StringUtil.collapseNewlines("abc\nabc"), "abc\nabc");
+		assertEquals(StringUtil.collapseNewlines("abc\n\nabc"), "abc\nabc");
 
 	}
 

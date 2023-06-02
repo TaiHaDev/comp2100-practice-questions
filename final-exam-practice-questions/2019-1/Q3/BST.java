@@ -27,8 +27,16 @@ public class BST {
 		 */
 	    public Node find(String s) {
 			// TODO: Add your implementation here.
-	        return this;
-	    }
+			if (this.value.compareTo(s) > 0) {
+				if (this.left != null) return this.left.find(s);
+				else return null;
+			} else if (this.value.compareTo(s) < 0) {
+				if (this.right != null) return this.right.find(s);
+				else return null;
+			} else {
+				return this;
+			}
+		}
 
 		/**
 		 * Insert a new node into the tree
@@ -37,6 +45,19 @@ public class BST {
 		 */
 		public Node insert(String s) {
 			// TODO: Add your implementation here.
+			if (this.value.compareTo(s) > 0) {
+				if (this.left != null) {
+					this.left = this.left.insert(s);
+				} else {
+					this.left = new Node(s);
+				}
+			} else if (this.value.compareTo(s) < 0) {
+				if (this.right != null) {
+					this.right = this.right.insert(s);
+				} else {
+					this.right = new Node(s);
+				}
+			}
 			return this;
 		}
 		
@@ -45,7 +66,18 @@ public class BST {
 		 */
 		public String printOddNodes() {
 			// TODO: Add your implementation here.
-			return "";
+			StringBuilder stringBuilder = new StringBuilder();
+			if (left != null && right == null || (left == null && right != null)) {
+				stringBuilder.append(value).append(" ");
+			}
+
+			if (left != null) {
+				stringBuilder.append(left.printOddNodes());
+			}
+			if (right != null) {
+				stringBuilder.append(right.printOddNodes());
+			}
+			return stringBuilder.toString();
 		}
 	}
 

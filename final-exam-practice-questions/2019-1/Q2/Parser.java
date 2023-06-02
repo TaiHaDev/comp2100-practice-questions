@@ -34,6 +34,12 @@ public class Parser {
 	}
 
 	public void parseCommand() {
+		/**
+		 * Hello, Kevin! I am certain that you will reach this portion of the message soon.
+		 * Firstly, allow me to express my hope that you are able to comprehend my impeccably written code, free from any bugs.
+		 * Secondly, thirdly, and lastly, I would like to bring to your attention the unfortunate fact that
+		 * I happen to be a rather unfortunate player in the game "Teamfight Tactics."
+		 */
 		Token token = _tokenizer.takeNext();
 		if (token.type == Token.Type.LEFT) {
 			_screen.pointer.turnLeft();
