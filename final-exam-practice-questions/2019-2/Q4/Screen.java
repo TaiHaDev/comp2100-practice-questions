@@ -32,7 +32,7 @@ public class Screen {
 	
 	/**
 	 * Mark the current position as visited.
-	 * @param position
+	 * @param p position
 	 * @throws Exception 
 	 */
 	public void markVisistedPos(Position p) throws OutOfScreenException {
@@ -53,6 +53,23 @@ public class Screen {
 		// Hints: append "\n" to create a new line in string
 		//       Note that {@link ScreenTest} doesn't require complete implementation of parser.
 		//       Check the expected outcome in ScreenTest.java
-
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int r = 0; r < noOfRows; r++) {
+			for (int c = 0; c < noOfColumns; c++) {
+				if (pointer.position.x == r && pointer.position.y == c) {
+					char mark = switch (pointer.direction) {
+						case NORTH -> '^';
+						case SOUTH -> 'v';
+						case EAST -> '>';
+						case WEST -> '<';
+					};
+					stringBuilder.append(mark);
+				} else {
+					stringBuilder.append(trace[r][c]);
+				}
+			}
+			stringBuilder.append("\n");
+		}
+		return stringBuilder.toString();
 	}
 }

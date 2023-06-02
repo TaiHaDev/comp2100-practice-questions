@@ -50,8 +50,9 @@ public class ParserTest {
 				)
 			)
         );
-        
+
         Screen screen = parser.parse();
+		System.out.println(screen.trace());
         /**
          * The screen should now be:
 			#####################

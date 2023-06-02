@@ -23,25 +23,43 @@ public class Tokenizer {
             current = null;
         	return;
         }
-        
-        if (_buffer.startsWith(Token.Type.LEFT.toString())) 
+        else if (_buffer.startsWith(Token.Type.LEFT.toString()))
             current = new Token(Token.Type.LEFT);
         
-        if (_buffer.startsWith(Token.Type.RIGHT.toString())) 
+        else if (_buffer.startsWith(Token.Type.RIGHT.toString()))
             current = new Token(Token.Type.RIGHT);
         
         // TODO: Implement "FORWARD_TO_END" and "BACK_TO_END" tokenization.
         // TODO: Implement "FORWARD" and "BACK" tokenization.
-        // TODO: Implement "PENUP" and "PENDOWN" tokenization.        
-        // hints:
-        // - Do not consider the case where text is syntactically incorrect.        
-        // - Careful if you use String.startsWith. FORWARD_TO_END and FORWARD starts with
-        //   the same string "FORWARD". Same for the BACK cases.
-        // - Character.isDigit() may be useful in extracting the forward or back value from the buffer.
-        // - Use new Token(<type>, <original token str>, <value>) to return these tokens
-        // - Check the expected outcome in TokenizerTest.java
-
- 
+        // TODO: Implement "PENUP" and "PENDOWN" tokenization.
+        else if (_buffer.startsWith(Token.Type.PENUP.toString())) {
+            current = new Token(Token.Type.PENUP);
+        }
+        else if (_buffer.startsWith(Token.Type.PENDOWN.toString())) {
+            current = new Token(Token.Type.PENDOWN);
+        }
+        else if (_buffer.startsWith(Token.Type.FORWARD_TO_END.toString())) {
+            current = new Token(Token.Type.FORWARD_TO_END);
+        } else if (_buffer.startsWith(Token.Type.BACK_TO_END.toString())) {
+            current = new Token(Token.Type.BACK_TO_END);
+        } else {
+            String origin = _buffer.substring(0, _buffer.indexOf(";"));
+            String len = origin.substring(origin.indexOf("(") + 1, origin.indexOf(")"));
+            boolean isValid = true;
+            for (char c : len.toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid) {
+                if (_buffer.startsWith(Token.Type.BACK.toString())) {
+                    current = new Token(Token.Type.BACK, origin, Integer.parseInt(len));
+                } else {
+                    current = new Token(Token.Type.FORWARD, origin, Integer.parseInt(len));
+                }
+            }
+        }
     }
     
 
@@ -50,7 +68,12 @@ public class Tokenizer {
      * @return the next token
      */
     public Token current() {
-        return current;
+        if (hasNext()) {
+            next();
+            _buffer = _buffer.substring(_buffer.indexOf(";") + 1);
+            return current;
+        }
+        return null;
     }
 
     /**
@@ -60,7 +83,8 @@ public class Tokenizer {
         if(current == null){
             return false;
         }
-        return true;
+
+        return !_buffer.isEmpty();
     }
 
 }

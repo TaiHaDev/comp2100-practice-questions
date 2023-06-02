@@ -4,6 +4,8 @@
  */
 package tree;
 
+import org.w3c.dom.Node;
+
 /**
  * Binary search tree with integer keys (values). {@code insert} method is
  * provided.
@@ -25,8 +27,18 @@ public class BST {
 	public Boolean find(int value) {
 
 		// start your code
-
+		return find(root, value);
 		// end your code
+	}
+	private boolean find(Node node, int value) {
+		if (node == null) return false;
+		if (value < node.value) {
+			return find(node.left, value);
+		} else if (value > node.value) {
+			return find(node.right, value);
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -40,11 +52,41 @@ public class BST {
 	 * @param value value of the target node
 	 */
 	public void delete(int value) {
-
-		// start your code
-
-		// end your code
+		delete(root, value);
+		// start your cod
 	}
+
+	private Node delete(Node root, int value) {
+		if (root == null) return null;
+		if (value < root.value) {
+			root.left = delete(root.left, value);
+		} else if (value > root.value) {
+			root.right = delete(root.right, value);
+		} else {
+			if (root.left == null && root.right == null) return null;
+			else if (root.left == null) {
+				return root.right;
+			} else if (root.right == null) {
+				return root.left;
+			} else {
+				int minVal = minVal(root.right);
+				root.value = minVal;
+				root.right = delete(root.right, minVal);
+
+			}
+		}
+		return root;
+	}
+
+	private int minVal(Node right) {
+		int min = right.value;
+		while(right.left != null) {
+			min = right.left.value;
+			right = right.left;
+		}
+		return min;
+	}
+
 
 	/**
 	 * Q2 - Task3 TODO: Implement "sumEvenNodes" function. The method should return
@@ -56,10 +98,19 @@ public class BST {
 	 */
 	public int sumEvenNodes() {
 		//start your code
-		
-		
-		
+		return sumEvenNodes(root);
 		//end your code
+	}
+	public int sumEvenNodes(Node node) {
+		if (node == null) return 0;
+		int result = 0;
+		if (node.left == null && node.right == null) {
+			result += node.value;
+		} else if (node.left != null && node.right != null) {
+			result += node.value;
+		}
+		result += sumEvenNodes(node.left) + sumEvenNodes(node.right);
+		return result;
 	}
 
 	public class Node {
