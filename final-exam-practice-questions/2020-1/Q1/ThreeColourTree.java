@@ -1,6 +1,8 @@
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
 This question extends a red-black tree to a three-color tree data stucture.
@@ -35,10 +37,13 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 */
 	public Boolean testProp1() {
 		//START YOUR CODE
-		
-		return null;
-		
+
+		return test1Helper(root);
 		//END YOUR CODE
+	}
+	private boolean test1Helper(Node<T> node) {
+		if (node == null) return true;
+		return node.colour != Colour.VIOLET && test1Helper(node.left) && test1Helper(node.right);
 	}
 
 	/**
@@ -49,10 +54,16 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 */
 	public Boolean testProp2() {
 		//START YOUR CODE
-		
-		return null;
+		return root.colour == Colour.PINK && test2Helper(root);
 		
 		//END YOUR CODE
+	}
+	private boolean test2Helper(Node<T> node) {
+		if (node.left == null && node.right == null) return node.colour == Colour.PINK;
+		boolean result = true;
+		if (node.left != null) result = test2Helper(node.left);
+		if (node.right != null) result = result && test2Helper(node.right);
+		return result;
 	}
 
 	/**
@@ -63,10 +74,19 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 */
 	public Boolean testProp3() {
 		//START YOUR CODE
-		
-		return null;
-		
+		Set<Integer> count = new HashSet<>();
+		test3Help(count, root, 0);
+		return count.size() == 1;
 		//END YOUR CODE
+	}
+
+	private void test3Help(Set<Integer> count, Node<T> node, int cur) {
+		if (node.colour == Colour.PINK) cur += 1;
+		if (node.left == null && node.right == null) {
+			count.add(1 + cur);
+		}
+		if (node.left != null) test3Help(count, node.left, cur);
+		if (node.right != null) test3Help(count, node.right, cur);
 	}
 
 	/**
@@ -77,12 +97,24 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 */
 	public Boolean testProp4() {
 		//START YOUR CODE
-		
-		return null;
+		return test4Help(root);
 		
 		//END YOUR CODE
 	}
-	
+
+	private boolean test4Help(Node<T> node) {
+		if (node == null) return true;
+		if (node.colour == Colour.MAGENTA) {
+			if ((node.left != null && node.left.colour == Colour.MAGENTA)
+					|| (node.right != null && node.right.colour == Colour.MAGENTA)
+					|| (node.left == null && node.right == null)
+					|| (node.left != null && node.left.colour != Colour.PURPLE && node.right != null && node.right.colour != Colour.PURPLE)) {
+				return false;
+			}
+		}
+		return test4Help(node.left) && test4Help(node.right);
+	}
+
 	//HINT: testProp5() has been implemented.
 	public Boolean testProp5() {
 		return checkProp5(this.root);

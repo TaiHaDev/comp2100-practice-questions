@@ -80,11 +80,9 @@ public class Tokenizer {
      * @return whether there is another token in {@code _current}
      */
     public boolean hasNext() {
-        if(current == null){
-            return false;
-        }
-
-        return !_buffer.isEmpty();
+        Token prev = current;
+        next();
+        return prev != current;
     }
 
 }

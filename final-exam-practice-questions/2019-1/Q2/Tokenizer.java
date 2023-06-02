@@ -67,7 +67,7 @@ public class Tokenizer {
     public boolean hasNext() {
         // TODO: Add your implementation here.
 
-        return !_buffer.isEmpty();
+        return next() != null;
     }
    
 }

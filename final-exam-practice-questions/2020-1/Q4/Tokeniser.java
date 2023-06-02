@@ -35,12 +35,22 @@ public class Tokeniser {
 	 *         is invalid.
 	 */
 	public Token next() {
-		if (_buffer.isEmpty())
+		if (_buffer.isEmpty() || !(_buffer.contains("(") && _buffer.contains(")")))
 			return null;
 
 		// TODO: Complete this method
 		// START YOUR CODE
-
+		String ori;
+		if (_buffer.startsWith("INSERT INTO")) {
+			ori = _buffer.substring(0, _buffer.indexOf(")") + 1);
+			String value = ori.substring(ori.indexOf('O') + 2);
+			return new Token(Token.Type.INSERT_INTO, value, ori);
+		}
+		if (_buffer.startsWith("VALUES")) {
+			ori = _buffer.substring(_buffer.indexOf("VALUES"));
+			String value = ori.substring(ori.indexOf('('));
+			return new Token(Token.Type.VALUES, value, ori);
+		}
 	
 		
 		// You are allowed to remove the following 'return null' if necessary
