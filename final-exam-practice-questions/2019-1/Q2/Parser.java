@@ -24,6 +24,60 @@ public class Parser {
     public Screen parse() throws OutOfScreenException {
         // TODO: Add your implementation here.
         // hints: Check {@link Screen} and {@link Pointer} classes to see there is any methods/functions you can take advantage of.
-		return null;
+		parseExp();
+		return _screen;
 	}
+
+	public void parseExp() {
+		if (_tokenizer.hasNext()) parseCommand();
+		if (_tokenizer.hasNext()) parseExp();
+	}
+
+	public void parseCommand() {
+		Token token = _tokenizer.takeNext();
+		if (token.type == Token.Type.LEFT) {
+			_screen.pointer.turnLeft();
+		} else if (token.type == Token.Type.RIGHT) {
+			_screen.pointer.turnRight();
+		} else if (token.type == Token.Type.PENUP) {
+			_screen.pointer.isPenDown = false;
+		} else if (token.type == Token.Type.PENDOWN){
+			_screen.pointer.isPenDown = true;
+			markCurrentPos();
+		} else {
+			Position pos = _screen.pointer.position;
+			Direction direction = _screen.pointer.direction;
+			int[] shift;
+			if (direction == Direction.Left) {
+				shift = new int[] {0, -1};
+			} else if (direction == Direction.Right) {
+				shift = new int[] {0 , 1};
+			} else if (direction == Direction.Upward) {
+				shift = new int[] {-1, 0};
+			} else {
+				shift = new int[] {1, 0};
+			}
+			for (int i = 0; i < token.value; i++) {
+				if (token.type == Token.Type.FORWARD) {
+					pos.x += shift[0];
+					pos.y += shift[1];
+				} else {
+					pos.x -= shift[0];
+					pos.y -= shift[1];
+				}
+				if (_screen.pointer.isPenDown) {
+					markCurrentPos();
+				}
+			}
+		}
+	}
+
+	private void markCurrentPos() {
+		try {
+			_screen.markVisistedPos(_screen.pointer.position);
+		} catch (OutOfScreenException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

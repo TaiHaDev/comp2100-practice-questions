@@ -2,6 +2,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * You can use this to test your Parser implementation.
  * NOTE: When marking your submission, there can be more tests.
@@ -104,7 +106,8 @@ public class ParserTest {
         );
         
         Screen screen = parser.parse();
-        /**
+		System.out.println(screen.trace());
+		/**
          * The screen should now be:
           	.....>#### 
 			########## 

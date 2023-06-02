@@ -31,7 +31,7 @@ public class Screen {
 	
 	/**
 	 * Mark the current position as visited.
-	 * @param position
+	 * @param p position
 	 * @throws Exception 
 	 */
 	public void markVisistedPos(Position p) throws OutOfScreenException {
@@ -48,9 +48,20 @@ public class Screen {
 	 * @return a string representing the screen including pointer's visited positions, its current position and direction.
 	 */
 	public String trace() {
-		// TODO: Add your implementation here.
-		// hints: append "\n" to create a new line in string
-		return "";
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < trace.length; i++) {
+			String[] strings = trace[i];
+			for (int j = 0; j < strings.length; j++) {
+				String string = strings[j];
+				if (pointer.position.x == i && pointer.position.y == j) {
+					stringBuilder.append(getPointerIcon());
+				} else {
+					stringBuilder.append(string);
+				}
+			}
+			stringBuilder.append("\n");
+		}
+		return stringBuilder.toString();
 	}
 	
 	private String getPointerIcon() {
