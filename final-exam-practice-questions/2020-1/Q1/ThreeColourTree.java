@@ -37,7 +37,6 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 */
 	public Boolean testProp1() {
 		//START YOUR CODE
-
 		return test1Helper(root);
 		//END YOUR CODE
 	}
@@ -73,20 +72,27 @@ public class ThreeColourTree<T extends Comparable<T>> {
 	 * @return
 	 */
 	public Boolean testProp3() {
-		//START YOUR CODE
-		Set<Integer> count = new HashSet<>();
-		test3Help(count, root, 0);
-		return count.size() == 1;
-		//END YOUR CODE
+		return test3Help(root, 0, new int[]{-1});
 	}
 
-	private void test3Help(Set<Integer> count, Node<T> node, int cur) {
-		if (node.colour == Colour.PINK) cur += 1;
-		if (node.left == null && node.right == null) {
-			count.add(1 + cur);
+	private boolean test3Help(Node<T> node, int cur, int[] pathCount) {
+		if (node == null) {
+			return true;
 		}
-		if (node.left != null) test3Help(count, node.left, cur);
-		if (node.right != null) test3Help(count, node.right, cur);
+
+		if (node.colour == Colour.PINK) cur += 1;
+
+		if (node.left == null && node.right == null) {
+			// if this is the first leaf node, update pathCount
+			if (pathCount[0] == -1) {
+				pathCount[0] = cur;
+			}
+
+			// compare the count of PINK nodes in this path with pathCount
+			return cur == pathCount[0];
+		}
+
+		return test3Help(node.left, cur, pathCount) && test3Help(node.right, cur, pathCount);
 	}
 
 	/**
