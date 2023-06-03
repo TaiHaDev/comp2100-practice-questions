@@ -36,4 +36,12 @@ public class Token {
 
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Token{" +
+				"type=" + type +
+				", value='" + value + '\'' +
+				'}';
+	}
 }

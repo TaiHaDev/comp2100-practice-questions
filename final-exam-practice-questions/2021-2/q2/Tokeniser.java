@@ -21,6 +21,28 @@ public class Tokeniser {
 		}
 
 		// ########## YOUR CODE STARTS HERE ##########
+		String word = buffer.split(" ")[0];
+		if (word.equalsIgnoreCase("LOAD") ) {
+			currentToken = new Token(Token.Type.LOAD, word);
+		} else if (word.equalsIgnoreCase("SAVE")) {
+			currentToken = new Token(Token.Type.SAVE, word);
+		} else if (word.equalsIgnoreCase("FROM")) {
+			currentToken = new Token(Token.Type.FROM, word);
+		} else if (word.equalsIgnoreCase("TO")) {
+			currentToken = new Token(Token.Type.TO, word);
+		} else if (currentToken != null && (currentToken.getType() == Token.Type.LOAD || currentToken.getType() == Token.Type.SAVE)) {
+			currentToken = new Token(Token.Type.PARAMETER, word);
+		} else if (currentToken != null && (currentToken.getType() == Token.Type.FROM || currentToken.getType() == Token.Type.TO)) {
+			int terminatorIdx = word.indexOf(";");
+			if (terminatorIdx != -1) {
+				word = word.substring(0, terminatorIdx);
+			}
+			currentToken = new Token(Token.Type.PARAMETER, word);
+		} else if (word.startsWith(";")) {
+			currentToken = new Token(Token.Type.TERMINATOR, ";");
+		} else {
+			return;
+		}
 
 		// ########## YOUR CODE ENDS HERE ##########
 

@@ -1,9 +1,7 @@
+import org.w3c.dom.Node;
 import parcel.Parcel;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class ParcelBST extends BinarySearchTree<Parcel> implements Iterable<Parcel>  {
 
@@ -34,28 +32,33 @@ public class ParcelBST extends BinarySearchTree<Parcel> implements Iterable<Parc
         //    ParcelBST.this.value    ParcelBST.this.leftNode   ParcelBST.this.rightNode
         // Or equivalently directly:
         //    value   leftNode    rightNode
-
-
+        Stack<Tree<Parcel>> stack = new Stack<>();
         // You may add methods and variables here if you wish
-
         public IteratorPreOrder() {
-            // You may add code here if you wish
-        }
+            stack.add(ParcelBST.this);
+        };
 
         @Override
         public boolean hasNext() {
             // TODO
             // START YOUR CODE
-
-            return false;
+            return !stack.isEmpty();
             // END YOUR CODE
         }
         @Override
         public Parcel next() {
             // TODO
             // START YOUR CODE
+            if (stack.isEmpty()) throw new NoSuchElementException();
+            Tree<Parcel> currentNode = stack.pop();
+            if(currentNode.rightNode != null && !(currentNode.rightNode instanceof EmptyTree)) {
+                stack.push(currentNode.rightNode);
+            }
 
-            return null;
+            if(currentNode.leftNode != null && !(currentNode.leftNode instanceof EmptyTree)) {
+                stack.push(currentNode.leftNode);
+            }
+            return currentNode.value;
             // END YOUR CODE
         }
     }

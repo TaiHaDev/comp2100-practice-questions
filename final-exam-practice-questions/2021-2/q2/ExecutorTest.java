@@ -85,7 +85,6 @@ public class ExecutorTest {
 
 	private void execute(String text) {
 		Parser parser = new Parser(new Tokeniser(text));
-
 		Executor executor = new Executor(parser.parseCmds());
 
 		executor.execute();

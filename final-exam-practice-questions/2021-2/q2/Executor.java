@@ -11,6 +11,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Executor {
 
@@ -52,19 +55,35 @@ public class Executor {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.newDocument();
 
-			// TODO
-			// ########## YOUR CODE STARTS HERE ##########
+			Element rootElem = doc.createElement("persons");
+			doc.appendChild(rootElem);
+			for (Person person : persons) {
+				Element personElement = doc.createElement("person");
+				Element nameElem = doc.createElement("name");
+				nameElem.appendChild(doc.createTextNode(person.getName()));
+				personElement.appendChild(nameElem);
 
+				Element genderElem = doc.createElement("gender");
+				genderElem.appendChild(doc.createTextNode(person.getGender()));
+				personElement.appendChild(genderElem);
+
+				Element ageElem = doc.createElement("age");
+				ageElem.appendChild(doc.createTextNode(String.valueOf(person.getAge())));
+				personElement.appendChild(ageElem);
+
+				Element occupationElem = doc.createElement("occupation");
+				occupationElem.appendChild(doc.createTextNode(person.getOccupation()));
+				personElement.appendChild(occupationElem);
+				rootElem.appendChild(personElement);
+			}
 			// ########## YOUR CODE ENDS HERE ##########
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 
 			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 
-			// INDENT the xml file is optional, you can
-			// uncomment the following statement if you would like the xml files to be more
-			// readable
-			// transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+			 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(f);
@@ -99,7 +118,19 @@ public class Executor {
 
 			// TODO
 			// ########## YOUR CODE STARTS HERE ##########
-
+			NodeList nodeList = doc.getElementsByTagName("person");
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node node = nodeList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					Element elem = (Element) node;
+					Person curPerson = new Person();
+					curPerson.setName(elem.getElementsByTagName("name").item(0).getTextContent());
+					curPerson.setGender(elem.getElementsByTagName("gender").item(0).getTextContent());
+					curPerson.setOccupation(elem.getElementsByTagName("occupation").item(0).getTextContent());
+					curPerson.setAge(Integer.parseInt(elem.getElementsByTagName("age").item(0).getTextContent()));
+					persons.add(curPerson);
+				}
+			}
 			// ########## YOUR CODE ENDS HERE ##########
 
 			this.db.save(lc.getKey(), persons);

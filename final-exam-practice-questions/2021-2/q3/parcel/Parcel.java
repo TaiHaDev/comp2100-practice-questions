@@ -47,8 +47,9 @@ public class Parcel implements Comparable<Parcel> {
 	public int compareTo(Parcel other) {
 		// TODO
 		// START YOUR CODE
-
-		return 0;
+		double thisDistance = recipient.getLocation().getDistance(new CartesianCoordinate(20,10));
+		double otherDistance = other.getRecipient().getLocation().getDistance(new CartesianCoordinate(20, 10));
+		return Double.compare(thisDistance, otherDistance);
 		// END YOUR CODE
 	}
 
