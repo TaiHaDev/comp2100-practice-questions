@@ -178,7 +178,7 @@ public class RBTree<K extends Comparable<K>, T> {
 	/**
 	 * Demo functions (Safely) insert a value into the tree
 	 *
-	 * @param value T The value of the new node being inserted.
+	 * @param key, data value T The value of the new node being inserted.
 	 */
 	public void insert(K key, T data) {
 		Node<K, T> node = new Node<K, T>(key, data);
@@ -278,14 +278,22 @@ public class RBTree<K extends Comparable<K>, T> {
 		return null;
 	}
 
-	public List<Node> levelTraversal() {
+	public List<Node<K ,T>> levelTraversal() {
 
-		List<Node> ret = new LinkedList<>();
-
+		List<Node<K, T>> ret = new LinkedList<>();
+		if (root == null) return ret;
 		// ########## YOUR CODE STARTS HERE ##########
-		
-
-
+		Queue<Node<K,T>> queue = new LinkedList<>();
+		queue.add(root);
+		while (!queue.isEmpty()) {
+			int queueSize = queue.size();
+			for (int i = queueSize - 1; i >= 0; i--) {
+				Node<K,T> cur = queue.poll();
+				ret.add(cur);
+				if (cur.right != null) queue.add(cur.right);
+				if (cur.left != null) queue.add(cur.left);
+			}
+		}
 		// ########## YOUR CODE ENDS HERE ##########
 
 		return ret;
