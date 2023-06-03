@@ -12,6 +12,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * IMPORTANT: This class is incomplete. Please look for "TODO" comments.
@@ -105,7 +107,6 @@ public class XMLTable {
 	 * Get all records from the XML file
 	 */
 	public List<Customer> load(String tableName) {
-
 		List<Customer> customers = new ArrayList<>();
 
 		File f = new File(FileUtil.getTableFileName(tableName));
@@ -113,12 +114,68 @@ public class XMLTable {
 			return customers;
 		}
 
-		// TODO: Complete this method
-		// START YOUR CODE
+		// Initialize the DocumentBuilderFactory
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		try {
+			// Create a DocumentBuilder
+			DocumentBuilder db = dbf.newDocumentBuilder();
 
-		
+			// Create a Document from the XML file
+			Document doc = db.parse(f);
 
-		// END YOUR CODE
+			// Normalize the XML structure
+			doc.getDocumentElement().normalize();
+
+			// Get all elements named 'customer'
+			NodeList nodeList = doc.getElementsByTagName(Customer.KEY_ELEMENT);
+
+			// Loop through each 'customer' element
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node node = nodeList.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					Element customerElem = (Element) node;
+
+					// Create a new Customer
+					Customer customer = new Customer();
+
+					// Set Customer properties from XML elements
+					NodeList idNode = customerElem.getElementsByTagName(Customer.KEY_ID);
+					if(idNode.getLength() > 0) {
+						customer.setId(Integer.parseInt(idNode.item(0).getTextContent()));
+					}
+
+					NodeList nameNode = customerElem.getElementsByTagName(Customer.KEY_NAME);
+					if(nameNode.getLength() > 0) {
+						customer.setName(nameNode.item(0).getTextContent());
+					}
+
+					NodeList addressNode = customerElem.getElementsByTagName(Customer.KEY_ADDRESS);
+					if(addressNode.getLength() > 0) {
+						customer.setAddress(addressNode.item(0).getTextContent());
+					}
+
+					NodeList cityNode = customerElem.getElementsByTagName(Customer.KEY_CITY);
+					if(cityNode.getLength() > 0) {
+						customer.setCity(cityNode.item(0).getTextContent());
+					}
+
+					NodeList postCodeNode = customerElem.getElementsByTagName(Customer.KEY_POSTCODE);
+					if(postCodeNode.getLength() > 0) {
+						customer.setPostCode(postCodeNode.item(0).getTextContent());
+					}
+
+					NodeList countryNode = customerElem.getElementsByTagName(Customer.KEY_COUNTRY);
+					if(countryNode.getLength() > 0) {
+						customer.setCountry(countryNode.item(0).getTextContent());
+					}
+
+					// Add the customer to the list
+					customers.add(customer);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return customers;
 	}
@@ -134,9 +191,9 @@ public class XMLTable {
 		// START YOU CODE
 		// HINT: insert the given customer to the XML file.
 		// You can call the load() and save() methods
-		
-
-		
+		List<Customer> list = load(tableName);
+		list.add(customer);
+		save(tableName, list);
 		// END YOUR CODE
 	}
 }

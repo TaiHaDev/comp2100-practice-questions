@@ -40,6 +40,7 @@ public class Tokeniser {
 
 		// TODO: Complete this method
 		// START YOUR CODE
+		System.out.println(_buffer);
 		String ori;
 		if (_buffer.startsWith("INSERT INTO")) {
 			ori = _buffer.substring(0, _buffer.indexOf(")") + 1);
