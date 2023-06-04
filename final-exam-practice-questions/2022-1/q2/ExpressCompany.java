@@ -24,23 +24,33 @@ public abstract class ExpressCompany implements ParcelHandler {
 
 		// TODO
 		// ########## YOUR CODE STARTS HERE ##########
-
+		List<ItemType> items = parcel.getItems();
+		for (ItemType item : items) {
+			if (illegalItems.contains(item)) throw new IllegalParcelItemException();
+		}
 		// ########## YOUR CODE ENDS HERE ##########
 	}
 
 	public int calculateDistance(Parcel parcel) {
-
-		int distance = 0;
-
+		Point destination = parcel.getDestination();
+		double distance = Math.sqrt(Math.pow(destination.x - location.x, 2) + Math.pow(destination.y - location.y, 2));
 		// TODO
 		// HINT: You can use the functions in Math library, e.g. Math.ceil(),
 		// Math.sqrt(), Math.pow()
 		// ########## YOUR CODE STARTS HERE ##########
 
 		// ########## YOUR CODE ENDS HERE ##########
-
-		return distance;
+		return (int) Math.ceil(distance);
 	}
 
 	public abstract double calculateQuote(Parcel parcel);
+
+	@Override
+	public String toString() {
+		return "ExpressCompany{" +
+				"location=" + location +
+				", deliveryRadius=" + deliveryRadius +
+				", illegalItems=" + illegalItems +
+				'}';
+	}
 }

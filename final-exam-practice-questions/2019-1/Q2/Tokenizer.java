@@ -3,6 +3,9 @@
  * @author huy.pham
  */
 public class Tokenizer {
+    public static void main(String[] args) {
+        new Tokenizer("LEFTTT;").next();
+    }
     private String _buffer;
     private final char COMMAND_SEPARATOR = ';'; 
     
@@ -17,7 +20,11 @@ public class Tokenizer {
         _buffer = _buffer.trim();
         if (_buffer.isEmpty())
             return null;
-        
+        //check if there's any token left
+        int terminatorIndex = _buffer.indexOf(";");
+        if (terminatorIndex == -1) return null;
+        // extract the next token's string representation
+        if (terminator)
         if (_buffer.startsWith(Token.Type.LEFT.toString())) 
             return new Token(Token.Type.LEFT);
         
