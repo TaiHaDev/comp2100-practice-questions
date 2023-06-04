@@ -1,6 +1,9 @@
 public class Tokeniser {
 	public static void main(String[] args) {
-		System.out.println(new Tokeniser("LOAD abc**FROM"));
+		Tokeniser tokeniser = new Tokeniser("LOAD a from b;Save me from you");
+		while(tokeniser.hasNext()) {
+			System.out.println(tokeniser.next(););
+		}
 	}
 	private String buffer; // save text
 	private Token currentToken; // save token extracted from next()

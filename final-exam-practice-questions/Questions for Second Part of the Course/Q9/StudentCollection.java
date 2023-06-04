@@ -1,4 +1,18 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -37,7 +51,68 @@ public class StudentCollection {
 	 */
 	public void saveToFile(File file) {
 		//START YOUR CODE
-		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.newDocument();
+			Element rootElem = doc.createElement("students");
+			doc.appendChild(rootElem);
+			for (Student student : students) {
+				Element curElem = doc.createElement("student");
+
+				Element ageElem = doc.createElement("age");
+				ageElem.appendChild(doc.createTextNode(String.valueOf(student.getAge())));
+				curElem.appendChild(ageElem);
+
+				Element nameElem = doc.createElement("name");
+				nameElem.appendChild(doc.createTextNode(String.valueOf(student.getName())));
+				curElem.appendChild(nameElem);
+
+				if (student.getHeight() != null) {
+					Element heightElem = doc.createElement("height");
+					heightElem.appendChild(doc.createTextNode(String.valueOf(student.getHeight())));
+					curElem.appendChild(heightElem);
+				}
+
+				if (student.getWeight() != null) {
+					Element weightElem = doc.createElement("weight");
+					weightElem.appendChild(doc.createTextNode(String.valueOf(student.getWeight())));
+					curElem.appendChild(weightElem);
+				}
+
+				if (student.getCourses() != null) {
+					Element coursesElem = doc.createElement("courses");
+					curElem.appendChild(coursesElem);
+					for (Course course : student.getCourses()) {
+						Element courseElem = doc.createElement("course");
+
+
+						Element courseNameElem = doc.createElement("name");
+						courseNameElem.appendChild(doc.createTextNode(course.getName()));
+						courseElem.appendChild(courseNameElem);
+
+						Element gradeElem = doc.createElement("grade");
+						gradeElem.appendChild(doc.createTextNode(String.valueOf(course.getGrade())));
+						courseElem.appendChild(gradeElem);
+
+						coursesElem.appendChild(courseElem);
+					}
+				}
+				rootElem.appendChild(curElem);
+			}
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+
+			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+
+
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(file);
+			transformer.transform(source, result);
+		} catch (ParserConfigurationException | TransformerException e) {
+			throw new RuntimeException(e);
+		}
 		//END YOUR CODE
 	}
 
@@ -49,8 +124,45 @@ public class StudentCollection {
 	 */
 	public static StudentCollection loadFromFile(File file) {
 		//START YOUR CODE
-		
+		List<Student> parsedStudent = new LinkedList<>(); // more efficient than dynamic array :)
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		try {
+			db = dbf.newDocumentBuilder();
+			Document doc = db.parse(file);
+			doc.getDocumentElement().normalize();
+			NodeList studentNode = doc.getElementsByTagName("student");
+			for (int i = 0; i < studentNode.getLength(); i++) {
+				Node node = studentNode.item(i);
+				if (node instanceof Element) {
+					Element elem = (Element) node;
+					Student curStudent = new Student();
+					curStudent = curStudent.withName(elem.getElementsByTagName("name").item(0).getTextContent());
+					curStudent = curStudent.withAge(Integer.valueOf(elem.getElementsByTagName("age").item(0).getTextContent()));
+					if (elem.getElementsByTagName("height").getLength() > 0) {
+						curStudent = curStudent.withHeight(Integer.valueOf(elem.getElementsByTagName("height").item(0).getTextContent()));
+					}
+					if (elem.getElementsByTagName("weight").getLength() > 0) {
+						curStudent = curStudent.withWeight(Integer.valueOf(elem.getElementsByTagName("weight").item(0).getTextContent()));
+					}
+					if (elem.getElementsByTagName("courses").getLength() > 0) {
+						NodeList courseNode = elem.getElementsByTagName("course");
+						for (int idx = 0; idx < courseNode.getLength(); idx++) {
+							if (courseNode.item(idx) instanceof Element curElem) {
+								Course curCourse = new Course(curElem.getElementsByTagName("name").item(0).getTextContent(),
+										Integer.parseInt(curElem.getElementsByTagName("grade").item(0).getTextContent()));
+								curStudent.addCourse(curCourse);
+							}
+						}
+					}
+					parsedStudent.add(curStudent);
+				}
+			}
+		} catch (ParserConfigurationException | IOException | SAXException e) {
+			throw new RuntimeException(e);
+		}
 		//END YOUR CODE
+		return new StudentCollection(parsedStudent);
 	}
 
 	@Override
@@ -65,5 +177,12 @@ public class StudentCollection {
 		}
 
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "StudentCollection{" +
+				"students=" + students +
+				'}';
 	}
 }
