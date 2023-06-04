@@ -23,12 +23,12 @@ public class Tokenizer {
             current = null;
         	return;
         }
-        else if (_buffer.startsWith(Token.Type.LEFT.toString()))
+        if (_buffer.startsWith(Token.Type.LEFT.toString()))
             current = new Token(Token.Type.LEFT);
         
         else if (_buffer.startsWith(Token.Type.RIGHT.toString()))
             current = new Token(Token.Type.RIGHT);
-        
+
         // TODO: Implement "FORWARD_TO_END" and "BACK_TO_END" tokenization.
         // TODO: Implement "FORWARD" and "BACK" tokenization.
         // TODO: Implement "PENUP" and "PENDOWN" tokenization.
