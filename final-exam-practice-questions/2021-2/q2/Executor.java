@@ -44,7 +44,7 @@ public class Executor {
 
 		List<Person> persons = this.db.load(sac.getKey());
 
-		File f = new File(sac.getFileName());
+		File f = new File(sac.getFileName()); // reference to file path
 		if (f.exists()) {
 			f.delete();
 		}
@@ -54,13 +54,19 @@ public class Executor {
 
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.newDocument();
+            // the upper part should be same for every question #
 
+
+			// usually we will have a list provided or as an argument.
+			// Iterate through each element in that list.
+			// Create a node and set the attribute of that based on the object attributes  for each element:
 			Element rootElem = doc.createElement("persons");
 			doc.appendChild(rootElem);
 			for (Person person : persons) {
 				Element personElement = doc.createElement("person");
-				Element nameElem = doc.createElement("name");
-				nameElem.appendChild(doc.createTextNode(person.getName()));
+				// these code is boilerplate code, you can change it by changing the element name and the attribute from the object in the list.
+				Element nameElem = doc.createElement("name"); // name can be changed to any attribute name
+				nameElem.appendChild(doc.createTextNode(person.getName())); // a text representation of the attribute
 				personElement.appendChild(nameElem);
 
 				Element genderElem = doc.createElement("gender");
@@ -74,10 +80,12 @@ public class Executor {
 				Element occupationElem = doc.createElement("occupation");
 				occupationElem.appendChild(doc.createTextNode(person.getOccupation()));
 				personElement.appendChild(occupationElem);
+				// remember to append this node to the root node that we created at first
+
 				rootElem.appendChild(personElement);
 			}
-			// ########## YOUR CODE ENDS HERE ##########
 
+			// the lower part should be the same for every question
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 
 			transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
@@ -124,7 +132,7 @@ public class Executor {
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					Element elem = (Element) node;
 					Person curPerson = new Person();
-					curPerson.setName(elem.getElementsByTagName("name").item(0).getTextContent());
+					curPerson.setName(elem.getElementsByTagName("name").item(0).getTextContent());  // change "name" to string that used in the saving process, the rest should be the same
 					curPerson.setGender(elem.getElementsByTagName("gender").item(0).getTextContent());
 					curPerson.setOccupation(elem.getElementsByTagName("occupation").item(0).getTextContent());
 					curPerson.setAge(Integer.parseInt(elem.getElementsByTagName("age").item(0).getTextContent()));
