@@ -23,27 +23,35 @@ public class Tokeniser {
 		}
 
 		// ########## YOUR CODE STARTS HERE ##########
-		String word = buffer.split(" ")[0];
-		if (word.equalsIgnoreCase("LOAD") ) {
-			currentToken = new Token(Token.Type.LOAD, word);
-		} else if (word.equalsIgnoreCase("SAVE")) {
-			currentToken = new Token(Token.Type.SAVE, word);
-		} else if (word.equalsIgnoreCase("FROM")) {
-			currentToken = new Token(Token.Type.FROM, word);
-		} else if (word.equalsIgnoreCase("TO")) {
-			currentToken = new Token(Token.Type.TO, word);
-		} else if (currentToken != null && (currentToken.getType() == Token.Type.LOAD || currentToken.getType() == Token.Type.SAVE)) {
-			currentToken = new Token(Token.Type.PARAMETER, word);
-		} else if (currentToken != null && (currentToken.getType() == Token.Type.FROM || currentToken.getType() == Token.Type.TO)) {
-			int terminatorIdx = word.indexOf(";");
-			if (terminatorIdx != -1) {
-				word = word.substring(0, terminatorIdx);
-			}
-			currentToken = new Token(Token.Type.PARAMETER, word);
-		} else if (word.startsWith(";")) {
-			currentToken = new Token(Token.Type.TERMINATOR, ";");
-		} else {
+		// check if there's any token left
+		int terminatorIndex = buffer.indexOf(";");
+		int spaceIndex = buffer.indexOf(" ");
+		if (spaceIndex == -1 && terminatorIndex == -1) {
+			currentToken = null;
 			return;
+		}
+
+		// extract the next token's string representation
+		String token;
+		if (spaceIndex != -1) {
+			token = buffer.substring(0, spaceIndex);
+		} else {
+			token = buffer.substring(0, terminatorIndex);
+		}
+
+		// find the suitable token to the extracted string
+		if (terminatorIndex == 0) {
+			currentToken = new Token(Token.Type.TERMINATOR, ";");
+		} else if (token.equalsIgnoreCase("LOAD") ) {
+			currentToken = new Token(Token.Type.LOAD, token);
+		} else if (token.equalsIgnoreCase("SAVE")) {
+			currentToken = new Token(Token.Type.SAVE, token);
+		} else if (token.equalsIgnoreCase("FROM")) {
+			currentToken = new Token(Token.Type.FROM, token);
+		} else if (token.equalsIgnoreCase("TO")) {
+			currentToken = new Token(Token.Type.TO, token);
+		} else {
+			currentToken = new Token(Token.Type.PARAMETER, token);
 		}
 
 		// ########## YOUR CODE ENDS HERE ##########

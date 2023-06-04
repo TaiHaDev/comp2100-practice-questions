@@ -24,34 +24,26 @@ public class Tokenizer {
         int terminatorIndex = _buffer.indexOf(";");
         if (terminatorIndex == -1) return null;
         // extract the next token's string representation
-        if (terminator)
-        if (_buffer.startsWith(Token.Type.LEFT.toString())) 
+        String token = _buffer.substring(0, terminatorIndex);
+        if (token.equalsIgnoreCase(Token.Type.LEFT.toString()))
             return new Token(Token.Type.LEFT);
         
-        if (_buffer.startsWith(Token.Type.RIGHT.toString())) 
+        if (token.equalsIgnoreCase(Token.Type.RIGHT.toString()))
             return new Token(Token.Type.RIGHT);
 
-        if (_buffer.startsWith(Token.Type.PENUP.toString())) {
+        if (token.equalsIgnoreCase(Token.Type.PENUP.toString())) {
             return new Token(Token.Type.PENUP);
         };
-        if (_buffer.startsWith(Token.Type.PENDOWN.toString())) {
+        if (token.equalsIgnoreCase(Token.Type.PENDOWN.toString())) {
             return new Token(Token.Type.PENDOWN);
         }
-        String tokenStr = _buffer.substring(0, _buffer.indexOf(";"));
-        String distance = tokenStr.substring(tokenStr.indexOf("(") + 1, tokenStr.indexOf(")"));
-        boolean isDigit = true;
-        for (char c : distance.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                isDigit = false;
-            }
-        }
-        if (!isDigit) return null;
-        if (_buffer.startsWith(Token.Type.FORWARD.toString())) {
-            return new Token(Token.Type.FORWARD, tokenStr, Integer.parseInt(distance));
+
+        if (token.startsWith(Token.Type.FORWARD.toString())) {
+            return new Token(Token.Type.FORWARD, token, Integer.parseInt(token.substring(token.indexOf("(") + 1, token.indexOf(")"))));
 
         }
-        if (_buffer.startsWith(Token.Type.BACK.toString())) {
-            return new Token(Token.Type.BACK, tokenStr, Integer.parseInt(distance));
+        if (token.startsWith(Token.Type.BACK.toString())) {
+            return new Token(Token.Type.BACK, token, Integer.parseInt(token.substring(token.indexOf("(") + 1, token.indexOf(")"))));
         }
         return null;
     }
