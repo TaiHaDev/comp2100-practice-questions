@@ -23,8 +23,11 @@ public class Tokenizer {
         //check if there's any token left
         int terminatorIndex = _buffer.indexOf(";");
         if (terminatorIndex == -1) return null;
+
         // extract the next token's string representation
         String token = _buffer.substring(0, terminatorIndex);
+
+        // find the suitable token to the extracted string
         if (token.equalsIgnoreCase(Token.Type.LEFT.toString()))
             return new Token(Token.Type.LEFT);
         

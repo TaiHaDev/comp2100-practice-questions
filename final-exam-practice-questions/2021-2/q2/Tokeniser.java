@@ -2,7 +2,6 @@ public class Tokeniser {
 	public static void main(String[] args) {
 		Tokeniser tokeniser = new Tokeniser("LOAD a from b;Save me from you");
 		while(tokeniser.hasNext()) {
-			System.out.println(tokeniser.next(););
 		}
 	}
 	private String buffer; // save text
@@ -36,7 +35,9 @@ public class Tokeniser {
 
 		// extract the next token's string representation
 		String token;
-		if (spaceIndex != -1) {
+		if (spaceIndex != -1 && terminatorIndex != -1) {
+			token = buffer.substring(0, Math.min(spaceIndex, terminatorIndex));
+		} else if (spaceIndex != -1) {
 			token = buffer.substring(0, spaceIndex);
 		} else {
 			token = buffer.substring(0, terminatorIndex);

@@ -16,6 +16,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Executor {
+	public static void main(String[] args) {
+		System.out.println(Token.Type.TO.equals(Token.Type.TO));
+	}
 
 	private final List<Command> commands;
 
@@ -80,8 +83,8 @@ public class Executor {
 				Element occupationElem = doc.createElement("occupation");
 				occupationElem.appendChild(doc.createTextNode(person.getOccupation()));
 				personElement.appendChild(occupationElem);
-				// remember to append this node to the root node that we created at first
 
+				// remember to append this node to the root node that we created at first
 				rootElem.appendChild(personElement);
 			}
 
